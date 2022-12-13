@@ -8,6 +8,7 @@ export class App extends Component {
       users: [],
       searchQuery: "",
       isDataLoaded: false,
+      error: null,
     };
   }
 
@@ -25,11 +26,16 @@ export class App extends Component {
         return response.json();
       })
       .then((users) => this.setState({ users, isDataLoaded: true }))
-      .catch((err) => console.log(`Problem communicating with API, ${err}`));
+      .catch((err) =>
+        this.setState(
+          { error: `Problem communicating with API, ${err}` },
+          console.log(`Problem communicating with API, ${err}`)
+        )
+      );
   }
 
   render() {
-    const { users, searchQuery, isDataLoaded } = this.state;
+    const { users, searchQuery, isDataLoaded, error } = this.state;
     const { handleInputChange } = this;
 
     const filteredUsers = users.filter((user) =>
@@ -61,6 +67,8 @@ export class App extends Component {
           ) : (
             <p>Loading...</p>
           )}
+          {/* Error Feedback */}
+          {error && <p>{error}</p>}
         </div>
       </div>
     );
